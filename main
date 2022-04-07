@@ -1,0 +1,31 @@
+/*
+- Add to the Sheet which stores the responses from a Form
+*/
+
+function formResponseMailer() {
+  //add receipients; separate receipients with commas
+  const recipient = ""
+  //edit subject line of email
+  const subject = ""
+
+  const sheet = SpreadsheetApp.getActiveSheet();
+  let lastRow = sheet.getLastRow();
+  let lastCol = sheet.getLastColumn();
+
+  //get last response items 
+  let responseRange = sheet.getRange(lastRow, 1, lastRow, lastCol);
+  let responseItems = responseRange.getValues()[0];
+
+  //get arr of sheet headers
+  let headers = SpreadsheetApp.getActiveSpreadsheet().getActiveSheet().getDataRange().getValues().shift();
+
+  //map headers (questions) to responses for readability
+  let responseItemsHeaders = responseItems.map(function(e,i) {
+    return headers[i] + ": " + e + "\n";
+  });
+
+  //creates str body from mapped question-response arr
+  let body = responseItemsHeaders.join("")
+
+  MailApp.sendEmail(recipient, subject, body)
+}
